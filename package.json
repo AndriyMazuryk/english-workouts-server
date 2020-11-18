@@ -1,0 +1,28 @@
+{
+  "name": "english-workouts-server",
+  "version": "0.0.1",
+  "description": "\"Server application for English Workouts\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --watch src --exec babel-node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndriyMazuryk/english-workouts-server.git"
+  },
+  "author": "Andriy Mazuryk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndriyMazuryk/english-workouts-server/issues"
+  },
+  "homepage": "https://github.com/AndriyMazuryk/english-workouts-server#readme",
+  "dependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  }
+}
