@@ -1,29 +1,82 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import mongoose from 'mongoose'
-import bodyParser from 'body-parser'
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const dbConfig = require("./config/db.config");
+const serverConfig = require("./config/server.config");
 
-import config from './config'
-import userRoute from './routes/userRoute'
+const app = express();
 
-dotenv.config()
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
 
-const mongodbUrl = config.MONGODB_URL
-mongoose.connect(mongodbUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-}).catch(error => console.log(error.reason))
+app.use(cors(corsOptions));
 
-const app = express()
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.use('/api/users', userRoute)
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!')
-})
+const db = require("./models");
+const Role = db.role;
 
-const PORT = process.env.PORT || 5000
+db.mongoose
+  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  })
+  .catch((err) => {
+    console.error("Connection error", err);
+    process.exit();
+  });
 
-app.listen(PORT, () => console.log(`Server started at http://localhost:${PORT}`))
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "user",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: "moderator",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'moderator' to roles collection");
+      });
+
+      new Role({
+        name: "admin",
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'admin' to roles collection");
+      });
+    }
+  });
+}
+
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to English Workouts application." });
+});
+
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
+
+app.listen(serverConfig.PORT, () => {
+  console.log(`Server is running on port ${serverConfig.PORT}`);
+});

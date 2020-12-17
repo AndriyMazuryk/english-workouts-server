@@ -4,7 +4,7 @@
   "description": "\"Server application for English Workouts\"",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch src --exec babel-node src/server.js"
+    "start": "nodemon --watch src src/server.js"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,9 @@
   },
   "homepage": "https://github.com/AndriyMazuryk/english-workouts-server#readme",
   "dependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/node": "^7.12.6",
-    "@babel/preset-env": "^7.12.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
